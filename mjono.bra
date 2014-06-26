@@ -1,0 +1,50 @@
+
+público clase Sika:
+  det estática vacío principal(cad[] args):
+    cad kissa = "público clase Hermanni:"
+    cad kirahvi = "ent cad" + "clase" + "Verdado"
+
+    cad sika = "KISSA"
+    ent lehma = 3
+    cará mmh = '3'
+    
+    cad uuhi = "lij"
+    sos sdlk = 3.22
+    bool norsu = Verdado
+    ent possu = ent("3") + ent("2938") - 3
+    
+    digame(lehma 
+           + kissa)
+    Koira koira = nuevo Koira()
+    koira.hauku()
+  
+  det ent kissa():
+    digame("ij")
+    regresa 1
+
+público clase Koira:
+  privado
+  cad vuh = "Vuh vuh!"
+  
+  det vacío Hevonen():
+    digame(mmh)
+        
+  público
+  ent hannat = 23
+  cad mmh = "koi"
+  det Koira():
+    digame("lisjdf")
+   
+  det vacío hauku():
+    si vuh == "Vuh vuh!":
+      si 3 == 3:
+        digame(vuh);
+      demássi 3 == 2:
+        digame("ouO");
+      demás:
+        digame("mmh");
+  
+  
+  
+    
+
