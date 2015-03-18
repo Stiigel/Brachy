@@ -9,22 +9,24 @@ class Tiedosto:
       for tiedosto in tiedostot:
         if tiedosto[0:2] == "--":
           break
+        
         try:
-          luettava = open(tiedosto, 'r')
-          sisalto.extend(luettava.readlines())
-          luettava.close()
+          with open(tiedosto, 'r') as luettava:
+            sisalto.extend(luettava.read().rstrip().split('\n'))
+            
         except OSError:
           print(tiedosto + ' - Ei suuchia tiedostoa')
+          
     return sisalto
 
   def kirjoita(self,luokka):
-    tiedosto = open(luokka.nimi + ".java", 'w')
-    for usame in luokka.usamet:
-      tiedosto.write('import ' + usame + '\n')
+    with open(luokka.nimi + '.java', 'w') as tiedosto:
+      tiedosto.write('import java.util.*;\n')
+      for usame in luokka.usamet:
+        tiedosto.write('import ' + usame + ';\n')
       
-    for rivi in luokka.rivit:
-      tiedosto.write(rivi)
-    tiedosto.close()
+      for rivi in luokka.rivit:
+        tiedosto.write(rivi)
     
   def kirjoita_luokat(self, luokat, rivit):
     for i in range(len(luokat)):

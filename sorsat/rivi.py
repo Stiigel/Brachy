@@ -8,6 +8,9 @@ class Rivi:
     self.poista_mjonot()
     self.lisattyAaltis = False
   
+  def sub(self, juttu, korvaus):
+    self.jonoton = re.sub(juttu, korvaus, self.jonoton)
+    
   def poista_mjonot(self):
     self.jonot = []
     for jono in re.finditer(r'("(.*?)")|(\'(.*?)\')', self.koko):
@@ -15,7 +18,9 @@ class Rivi:
   
     self.jonoton = re.sub(r'("(.*?)")|(\'(.*?)\')', r'¡Streng!', self.koko)
     
-  def palauta_mjonot(self):
+  def palauta_mjonot(self, aukiSulut):
+    self.lisaa_puolipiste(aukiSulut)
+    
     self.koko = self.jonoton
     for i in range(len(self.jonot)):
       self.koko = self.koko.replace('¡Streng!', self.jonot[i], 1)   
