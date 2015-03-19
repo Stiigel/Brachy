@@ -84,11 +84,10 @@ class Parsija:
   
   def lisaa_luokka(self):
     if "clase" in self.rivi.jonoton or "estruct" in self.rivi.jonoton:
-      #luokNimi = re.search('(público clase (.*?)[ ]*:)|(público clase (.*?)\()', self.rivi.jonoton)
       luokNimi = re.search('( (clase|estruct) (.*?)[ ]*:)|( (clase|estruct) (.*?)\()', self.rivi.jonoton)
+      
       if luokNimi != None and 'privado' not in self.rivi.jonoton:      
         self.luokat.append(Luokka(luokNimi.group(3), self.sisennys.riviNum))
-        #sys.exit(luokNimi.group(3))
         self.luokkaNyt += 1
         self.funktiossa = False
         self.julkisuus = True if "estruct" in self.rivi.jonoton else False
@@ -114,16 +113,18 @@ class Parsija:
               ['Ent', 'Integer'], ['Sos', 'Double'], ['Cará', 'Character'],
               ['Bool', 'Boolean'], ['nulo', 'null']]       
   
-    sallitutAlku = '(=<' 
-    sallitutLopp = '>)'    
+    keno = chr(92)
+    sallitutAlut = '([' + keno + keno.join('s+*/-=[{(<') + '])'
+    sallitutLoput = '([' + keno + keno.join('s+*/-=]})>') + '])'
+    #sys.exit(sallitutAlut + ' ' + sallitutLoput)
+    
   
     for tyyppi in tyypit:
-      self.rivi.sub(tyyppi[0], tyyppi[1])
+      self.rivi.sub(sallitutAlut + tyyppi[0] + sallitutLoput, "\\1" + tyyppi[1] + "\\2")
     
     for tyyppi in tyypit:
       self.rivi.sub(tyyppi[0] + '\[(.*?)\]', tyyppi[1] + '[\\1]')
 
-    #if alkup != self.rivi.jonoton:
     if not self.funktiossa and self.rivi.jonoton.strip() != '':
       if 'usame' not in self.rivi.jonoton and 'class' not in self.rivi.jonoton:
         if self.julkisuus == True:
@@ -247,7 +248,8 @@ class Parsija:
     return False
 
   def parsi_tern(self):
-    self.rivi.sub('= (.*) si (.*) demás (.*)', '= (\\2) ? \\1 : \\3')
+    self.rivi.sub('(\S*) si (.*) demás (.*)', '(\\2) ? \\1 : \\3')
+    #self.rivi.sub(' (.*) si (.*) demás (.*)', ' (\\2) ? \\1 : \\3')
 
   def parsi_demas(self):
     alkup = self.rivi.jonoton
@@ -264,7 +266,3 @@ class Parsija:
     if alkup != self.rivi.jonoton:
       return True
     return False
-
-#15:44 < Jupp3> kaviaari: Meillä sentään lukiossa
-#äidinkielenopettaja kirjoitti usein rehellisesti punakynällä 
-    #marginaaliin "Väärä mielipide"
