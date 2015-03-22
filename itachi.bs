@@ -1,0 +1,101 @@
+
+público estruct Sika:
+  usame java.util.Scanner
+  
+  det estática vacío principal(cad[] args):
+    cad kissa = "público clase Hermanni:"
+    cad kirahvi = "ent cad" + "clase" + "Verdado"
+
+    cad sika = "KISSA"
+    ent lehma = 3
+    cará mmh = '3'
+    
+    ArrayList<cad> arraylista = nuevo ArrayList<>()
+    
+    #AL<cad> arraylista = nuevo AL()
+    
+    
+    si kissa.equals(sika):
+      digame("KISSA ON SIKA!")
+    demás:
+      digame("Kissa ei ole sika")
+      
+      #.iquala
+    
+    Lector lector = nuevo Lector(Sistema.in)
+    cad rivi = lector.nextLine()
+    
+    #Olen inva :(
+    ent koiraent = 2389
+    
+    cad uuhi = "lij"
+    sos sdlk = 3.22
+    bool norsu = Verdado
+    ent possu = ent("3") + ent("2938") - 3
+    
+    ent luku = 3 si norsu demás 1
+    
+    digame(lehma 
+           + kissa)
+    Koira koira = nuevo Koira("martti")
+    koira.hauku()
+    
+    ent i = 0
+    mientras i < 9:
+      digate(i + " ")
+      i++
+    digame()
+    
+    para ent e = 2; e <= 4; e++:
+      digame(e)      
+      
+    para ent j en intervalo(3):
+      digame(j)
+      
+    para ent k en intervalo(8, 3, -2):
+      digate(k)
+    digame()
+    
+    cad[] koirat = {"kissa", "hirvi", "sika"}
+    
+    para cad koi en koirat:
+      digame(koi)
+  
+  det ent kissa():
+    digame("ij")
+    regresa 1
+
+público clase Koira:
+  #JEEJee olen kommentti
+  #NiinMinäkkin
+  #clasella privaatteja defaultisti
+  cad vuh = "Vuh vuh!"  
+  cad nimi
+  
+  det vacío Hevonen():
+    digame(mmh)
+        
+  público
+  
+  ent hannat = 23
+  cad mmh = "koi"
+  
+  det __inic__(cad nimi):
+    este.nimi = nimi
+
+  det __inic__():
+    cad loers = "Lörs lärä"
+    este.nimi = "Doge"
+  
+  det __cad__():
+    regresa "Olen " + este.nimi
+   
+  det vacío hauku(cad sika, cad kissa="(lehma", ent koira=4):
+    si vuh == "Vuh vuh!":
+      si 3 == 3:
+        digame(vuh);
+      demássi 3 == 2:
+        digame("ouO");
+      demás:
+        digame("mmh");
+
