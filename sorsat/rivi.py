@@ -30,8 +30,9 @@ class Rivi:
       if aukiSulut == 0:
         if self.jonoton.strip() != '':
           if self.jonoton.strip()[-1] != ';':
-            erotus = len(self.jonoton) - len(self.jonoton.rstrip())
-            self.jonoton = self.jonoton[:-erotus] + ';' + self.jonoton[-erotus:]
+            if not self.jonoton.strip().startswith('@'):
+              erotus = len(self.jonoton) - len(self.jonoton.rstrip())
+              self.jonoton = self.jonoton[:-erotus] + ';' + self.jonoton[-erotus:]
       
       
       

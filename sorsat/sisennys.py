@@ -55,7 +55,7 @@ class Sisennys:
       
       valit = self.tasot[-1] * " "
       rivit.append(valit + "}\n")
-      self.tasot = self.tasot[0:-1]
+      self.tasot.pop()
       
       maara += 1
       
@@ -65,7 +65,7 @@ class Sisennys:
   def handlaa_sulut(self, rivi):
     self.aukiSulut += rivi.count('(') - rivi.count(')')
     if self.aukiSulut < 0:
-      print("SUREKA SUÖLUTUS")
+      print("SUREKA SUÖLUTUS noin rivillä %d: %s" % (self.riviNum, rivi))
       sys.exit()
     
     if self.aukiSulut > 0:
