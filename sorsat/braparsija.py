@@ -14,11 +14,6 @@ class BraParsija(Parsija):
       if self.parsi_kommentti('#', '//'):
         return
       
-      #if self.rivi.jonoton.strip()[0] == '@':
-        #self.rivit.append(self.rivi.jonoton)
-        #self.sisennys.riviNum += 1
-        #return
-      
       self.sisennys.laita_sisennys(self.rivi.jonoton, self.rivit)
       
       self.funktiossa = self.sisennys.onko_funktiossa(self.funktiossa)
@@ -37,7 +32,6 @@ class BraParsija(Parsija):
       self.funktiossa = True
       self.sisennys.laita_funkSisennys()
   
-    self.parsi_sekalaisia()
     self.parsi_tyypit()
     self.parsi_tern()
     
@@ -88,40 +82,33 @@ class BraParsija(Parsija):
         self.luokat.append(Luokka(luokNimi.group(3), self.sisennys.riviNum))
         self.luokkaNyt += 1
         self.funktiossa = False
-        self.julkisuus = 'private' if 'clase' in self.rivi.jonoton else self.julkisuus
-        self.julkisuus = 'public' if "estruct" in self.rivi.jonoton else self.julkisuus
-        self.julkisuus = '' if 'interfaz' in self.rivi.jonoton else self.julkisuus
         
+        if 'clase' in self.rivi.jonoton: self.julkisuus = 'private'
+        elif 'estruct' in self.rivi.jonoton: self.julkisuus = 'public'
+        elif 'interfaz' in self.rivi.jonoton: self.julkisuus = ''
+      
+  
+  def parsi_lista(self, lista):
+    for alkio in lista:
+      osat = alkio.split()
+      self.rivi.sub(self.sAlut + osat[0] + self.sLoput, "\\1" + osat[1] + "\\2")
       
   def parsi_luokkajuttu(self):
-    self.rivi.sub('público', 'public')
-    self.rivi.sub('clase', 'class')
-    self.rivi.sub('estruct', 'class')
-    self.rivi.sub('interfaz', 'interface')
-    self.rivi.sub('herramienta', 'implements')
-  
-  
-  def parsi_sekalaisia(self):
-    self.rivi.sub('ent\((.*?)\)', 'Integer.parseInt(\\1)') 
-    self.rivi.sub('sos\((.*?)\)', 'Double.parseDouble(\\1)')
-    self.rivi.sub('Lector', 'Scanner') 
-    self.rivi.sub('Sistema', 'System') 
-    self.rivi.sub(' último ', ' final ')
+    jutut = ['público public', 'clase class', 'estruct class',
+             'interfaz interface', 'herramienta implements',
+             'extenda extends', 'abstracto abstract']
+    self.parsi_lista(jutut)
 
   def parsi_tyypit(self):    
-    alkup = self.rivi.jonoton
-  
-    tyypit = [['cad', 'String'], ['cará', 'char'], ['(?<!mi)ent', 'int'],
-              ['sos', 'double'], ['bool', 'boolean'], ['vacío', 'void'],
-              ['Ent', 'Integer'], ['Sos', 'Double'], ['Cará', 'Character'],
-              ['Bool', 'Boolean'], ['nulo', 'null']]       
-  
-    keno = chr(92)
-    sallitutAlut = '([' + keno + keno.join('s+*/-=[{(<,') + '])'
-    sallitutLoput = '([' + keno + keno.join('s+*/-=]})>.,:') + '])'
-  
-    for tyyppi in tyypit:
-      self.rivi.sub(sallitutAlut + tyyppi[0] + sallitutLoput, "\\1" + tyyppi[1] + "\\2")
+    alkup = self.rivi.jonoton    
+    tyypit = ["cad String", "cará char", "ent int", "sos double",
+              "bool boolean", "vacío void", "Ent Integer", "Sos Double",
+              "Cará Character", "Bool Boolean", "nulo null"]
+    
+    self.rivi.sub(self.sAlut + 'ent\((.*?)\)', '\\1Integer.parseInt(\\2)') 
+    self.rivi.sub(self.sAlut + 'sos\((.*?)\)', '\\2Double.parseDouble(\\2)')
+
+    self.parsi_lista(tyypit)
     
     if not self.funktiossa and self.rivi.jonoton.strip() != '':
       if 'usame' not in self.rivi.jonoton and 'class' not in self.rivi.jonoton and not self.rivi.jonoton.strip().startswith('@'):
@@ -129,16 +116,15 @@ class BraParsija(Parsija):
         self.rivi.jonoton = self.sisennys.taso * " " + self.julkisuus + vali + self.rivi.jonoton.lstrip()
 
   def parsi_lorslara(self):
-    jutut = [['regresa', 'return'], ['estática', 'static'], ['principal', 'main'],
-              ['digame', 'System.out.println'], ['digate', 'System.out.print'],
-              ['digafe', 'System.out.printf'], ['Verdado', 'true'],
-              ['Falso', 'false'], ['nuevo', 'new'], ['este', 'this'],
-              ['rompe', 'break'], [' no ', '!'], ['sigue', 'continue']
-            ]
-  
-    for juttu in jutut: 
-      self.rivi.sub(juttu[0], juttu[1])
-  
+    jutut = ["regresa return", "estática static", "principal main",
+             "digame System.out.println", "digate System.out.print", 
+             "digafe System.out.printf", "Verdado true", "Falso false",
+             "nuevo new", "este this", "rompe break", "no !", 
+             "sigue continue", "Lector Scanner", "Sistema System",
+             "último final"]
+             
+    self.parsi_lista(jutut)
+ 
   def parsi_julkisuus(self):  
     julkisuudet = {'privado' : 'private', 'protegido' : 'protected', 'público' : 'public'}
 
@@ -150,7 +136,6 @@ class BraParsija(Parsija):
   def parsi_funktiot(self):
     alkup = self.rivi.jonoton
   
-    #julk = 'public' if self.julkisuus else 'private'
     self.rivi.sub('(\s|^)det ', '\\1%s ' % self.julkisuus)
 
     if alkup != self.rivi.jonoton:
@@ -198,16 +183,7 @@ class BraParsija(Parsija):
                                 ero=self.sisennys.ero*' ', funkNim=funkNimi,
                                 nimet=namNimet, puuttuvat=', '.join(puuttuvat)))
         
-
-  def parsi_tietotyypit(self):
-    tietotyypit = ['AL ArrayList', 'L List', 'HM HashMap',
-                    'HS HashSet', 'S Set']
-  
-    for tyyppi in tietotyypit:
-      tyyppi = tyyppi.split()
-      #self.rivi.sub('%s<.*?> 
-    
-
+        
   def parsi_silmukat(self):
     alkup = self.rivi.jonoton
     self.rivi.sub('mientras (.*):', 'while (\\1) {')
@@ -253,7 +229,7 @@ class BraParsija(Parsija):
 
   def parsi_si(self):
     alkup = self.rivi.jonoton
-    self.rivi.sub('si (.*):', 'if (\\1) {')
+    self.rivi.sub('(\s|^)si (.*):', '\\1if (\\2) {')
     if alkup != self.rivi.jonoton:
       return True
     return False

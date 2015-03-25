@@ -6,9 +6,13 @@ class Parsija:
     self.luokat = []
     self.rivit = []
     self.luokkaNyt = -1
-    self.julkisuus = True
+    self.julkisuus = 2
     self.funktiossa = False
     self.sisennys = Sisennys()
+    
+    keno = chr(92)
+    self.sAlut = '(^|[' + keno + keno.join('s+*/-=[]{}()<>,') + '])'
+    self.sLoput = '([' + keno + keno.join('s+*/-=[]{}()<>.,:') + ']|$)'
     
   def laita_rivi(self, rivi):
     self.rivi = Rivi(rivi)
